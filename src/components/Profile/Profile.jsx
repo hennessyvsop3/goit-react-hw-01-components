@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Profiler } from "./Profile.styled";
 
 export const Profile = ({
   username,
@@ -8,9 +9,9 @@ export const Profile = ({
   stats: { followers, views, likes },
 }) => {
   return (
-    <div className="profile">
+    <Profiler>
+      <img src={avatar} alt={username} className="avatar" />
       <div className="description">
-        <img src={avatar} alt={username} className="avatar" />
         <p className="name">{username}</p>
         <p className="tag">@{tag}</p>
         <p className="location">{location}</p>
@@ -30,7 +31,7 @@ export const Profile = ({
           <span className="quantity">{likes}</span>
         </li>
       </ul>
-    </div>
+    </Profiler>
   );
 };
 
