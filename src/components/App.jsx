@@ -1,19 +1,53 @@
-import { Profile } from "./Profile/Profile";
-import user from "../data/user.json";
-import data from "../data/data.json";
-import friends from "../data/friends.json"
-import items from "../data/transactions.json";
-import { Statistics } from "./Statistics/Statistics";
-import { FriendList } from "./FriendList/FriendList";
-import { TransactionHistory } from "./TransactionHistory/TransactionHistory";
+import { Component } from "react";
+import { Feedback } from "./Feedback/Feedback";
+import { Statistic } from "./Statistic/statistic";
+import IsEmptyNotification from "./notification/notification";
 
-export const App = () => {
-  return (
-    <div>
-      <Profile {...user} />
-      <Statistics title="Upload stats" stats={data} />
-      <FriendList friends={friends} />
-      <TransactionHistory items={items} />
-    </div>
-  );
-};
+export class App extends Component {
+  state = {
+    good: 0,
+    neutral: 0,
+    bad: 0,
+    showStat: false,
+    showMessage: true,
+  };
+
+  show = () => {
+    this.setState({
+      showStat: true,
+      showMessage: false,
+    });
+  };
+
+  handleAddClickStat = (value) => {
+    this.setState((prev) => ({ [value]: prev[value] + 1 }));
+    // this.setState(prev => ())
+  };
+
+  totalCalc = () => {
+    return this.state.good + this.state.bad + this.state.neutral;
+  };
+
+  positiveFeedbackCalc = () => {
+    return Math.round((this.state.good / this.totalCalc()) * 100);
+  };
+
+  render() {
+    return (
+      <>
+        <Feedback onClickBtn={this.handleAddClickStat} />
+        {this.totalCalc() ? (
+          <Statistic
+            good={this.state.good}
+            neutral={this.state.neutral}
+            bad={this.state.bad}
+            totalCalc={this.totalCalc()}
+            positiveFeedbackCalc={this.positiveFeedbackCalc()}
+          />
+        ) : (
+          <IsEmptyNotification/>
+        )}
+      </>
+    );
+  }
+}
